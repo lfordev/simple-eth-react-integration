@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import Web3 from 'web3'
 import './App.css';
 
-function App() {
+const App = () => {
+  const [account, setAccount] = useState("Cuenta no conectada")
+
+  useEffect(() => {
+    startWeb3()
+  }, [])
+
+  const startWeb3 = async() => {
+    const web3 = new Web3(Web3.currentProvider || "http://localhost:7545")
+    const network = await web3.eth.net.getNetworkType()
+    console.log("Network: ", network)
+    web3.eth.getAccounts((err, accounts) => {
+      setAccount(accounts[0])
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Bienvenido</h1>
+      <p>{account}</p>
     </div>
   );
 }
